@@ -6,7 +6,7 @@
     <meta name="theme-color" content="#111b1a" />
     <meta
       name="description"
-      content="Escapa de ERROR-404: supera la puerta bloqueada y desactiva la bomba digital."
+      content="Escapa de ERROR-404: supera la puerta, desactiva la bomba y hackea la terminal."
     />
     <title>Videojuego 404 | Escapa de ERROR-404</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -107,6 +107,9 @@
             </div>
             <p class="bomb-status" id="bomb-status" role="status" aria-live="polite">Elige la respuesta correcta para cortar la señal.</p>
             <button class="retry-button" id="retry-button" type="button" hidden>REINICIAR TEMPORIZADOR</button>
+            <button class="continue-button" id="continue-bomb-button" type="button" hidden>
+              CONTINUAR AL NIVEL 3 <span aria-hidden="true">↗</span>
+            </button>
           </div>
 
           <div class="level-footer"><span>OBJETIVO</span><span id="bomb-objective">Desactiva la bomba antes de 00:00</span></div>
@@ -123,6 +126,61 @@
           </div>
           <div class="scene-caption"><span class="lock-symbol" aria-hidden="true">⚠</span><span id="bomb-scene-label">AUTODESTRUCCIÓN ACTIVADA</span></div>
           <div class="scene-coordinate">NODE 404 &nbsp; / &nbsp; 00:45</div>
+        </div>
+      </section>
+
+      <section class="game-layout level-screen level-three" id="level-three" aria-labelledby="terminal-title" hidden>
+        <div class="story-panel">
+          <p class="eyebrow terminal-eyebrow"><span class="signal-dot"></span> CANAL DE INTRUSIÓN ABIERTO</p>
+          <h1 id="terminal-title">Hackear la<br /><span>terminal.</span></h1>
+          <p class="story-copy">Has llegado al núcleo de ERROR-404. Descifra la contraseña con las pistas y toma el control del sistema.</p>
+
+          <div class="terminal-panel">
+            <div class="terminal-heading"><span class="terminal-prompt-mark">&gt;_</span> ERROR-404 TERMINAL</div>
+            <p class="terminal-prompt">&gt; Introduce contraseña</p>
+            <form id="terminal-form" novalidate>
+              <label class="terminal-label" for="terminal-code">CONTRASEÑA DE 4 NÚMEROS</label>
+              <div class="terminal-input-row">
+                <input
+                  id="terminal-code"
+                  name="terminal-code"
+                  type="text"
+                  inputmode="numeric"
+                  autocomplete="off"
+                  maxlength="4"
+                  placeholder="_ _ _ _"
+                  aria-describedby="terminal-hints terminal-status"
+                  aria-label="Contraseña de cuatro números"
+                  required
+                />
+                <button class="hack-button" type="submit">EJECUTAR</button>
+              </div>
+            </form>
+            <div class="terminal-hints" id="terminal-hints">
+              <p><span>[PISTA 01]</span> El primer número es 7.</p>
+              <p><span>[PISTA 02]</span> El último número es 3.</p>
+              <p><span>[PISTA 03]</span> La suma de todos es 18.</p>
+            </div>
+            <p class="terminal-status" id="terminal-status" role="status" aria-live="polite">Esperando contraseña...</p>
+          </div>
+
+          <div class="level-footer"><span>OBJETIVO</span><span id="terminal-objective">Encuentra la contraseña para hackear ERROR-404</span></div>
+        </div>
+
+        <div class="scene terminal-scene" aria-label="Pantalla de terminal de ERROR-404">
+          <div class="scene-topline"><span>NÚCLEO 404</span><span>PROTOCOLO 03-C</span></div>
+          <div class="terminal-monitor">
+            <div class="monitor-top"><span>ERROR-404 TERMINAL</span><span class="monitor-light"></span></div>
+            <div class="monitor-screen">
+              <p>&gt; conexión establecida_</p>
+              <p>&gt; firewall activo</p>
+              <p class="monitor-warning">&gt; intruso detectado</p>
+              <p id="monitor-result">&gt; esperando contraseña<span class="cursor-block">_</span></p>
+            </div>
+            <div class="monitor-base"></div>
+          </div>
+          <div class="scene-caption"><span class="terminal-scene-mark" aria-hidden="true">&gt;_</span><span id="terminal-scene-label">ACCESO BLOQUEADO</span></div>
+          <div class="scene-coordinate">ROOT 404 &nbsp; / &nbsp; AUTH REQUIRED</div>
         </div>
       </section>
 

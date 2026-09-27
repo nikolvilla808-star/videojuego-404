@@ -15,7 +15,16 @@ const retryButton = document.querySelector("#retry-button");
 const bombObjective = document.querySelector("#bomb-objective");
 const bombScene = document.querySelector(".bomb-scene");
 const bombSceneLabel = document.querySelector("#bomb-scene-label");
-let secondsRemaining = 45;
+const continueBombButton = document.querySelector("#continue-bomb-button");
+const levelThree = document.querySelector("#level-three");
+const terminalForm = document.querySelector("#terminal-form");
+const terminalCode = document.querySelector("#terminal-code");
+const terminalStatus = document.querySelector("#terminal-status");
+const terminalObjective = document.querySelector("#terminal-objective");
+const terminalScene = document.querySelector(".terminal-scene");
+const terminalSceneLabel = document.querySelector("#terminal-scene-label");
+const monitorResult = document.querySelector("#monitor-result");
+let secondsRemaining = 240;
 let timerId;
 let bombSolved = false;
 
@@ -61,9 +70,10 @@ answerButtons.forEach((button) => {
       answerButtons.forEach((option) => { option.disabled = true; });
       bombStatus.textContent = "¡Correcto! Bomba desactivada. Has escapado de esta trampa.";
       bombStatus.dataset.state = "success";
-      bombObjective.textContent = "Nivel 2 superado · Nivel 3 pendiente";
+      bombObjective.textContent = "Nivel 2 superado";
       bombSceneLabel.textContent = "BOMBA DESACTIVADA";
       bombScene.classList.add("is-defused");
+      continueBombButton.hidden = false;
       return;
     }
 
@@ -72,6 +82,42 @@ answerButtons.forEach((button) => {
     button.classList.add("is-wrong");
     window.setTimeout(() => button.classList.remove("is-wrong"), 500);
   });
+});
+
+continueBombButton.addEventListener("click", () => {
+  levelTwo.hidden = true;
+  levelThree.hidden = false;
+  levelNumber.textContent = "NIVEL 03";
+  terminalCode.focus();
+});
+
+terminalForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const password = terminalCode.value.trim();
+
+  if (!/^\d{4}$/.test(password)) {
+    setTerminalStatus("error", "Introduce una contraseña de cuatro números.");
+    terminalCode.focus();
+    return;
+  }
+
+  const digits = [...password].map(Number);
+  const matchesClues = digits[0] === 7 && digits[3] === 3 && digits.reduce((sum, digit) => sum + digit, 0) === 18;
+
+  if (!matchesClues) {
+    setTerminalStatus("error", "ACCESO DENEGADO. Revisa las tres pistas e inténtalo otra vez.");
+    monitorResult.innerHTML = "&gt; contraseña rechazada<span class=\"cursor-block\">_</span>";
+    terminalCode.select();
+    return;
+  }
+
+  setTerminalStatus("success", "ACCESO CONCEDIDO. ¡Has hackeado ERROR-404 y completado el juego!");
+  monitorResult.innerHTML = "&gt; acceso concedido<span class=\"cursor-block\">_</span>";
+  terminalObjective.textContent = "ERROR-404 hackeada · Juego completado";
+  terminalSceneLabel.textContent = "SISTEMA BAJO TU CONTROL";
+  terminalScene.classList.add("is-hacked");
+  terminalCode.disabled = true;
+  terminalForm.querySelector("button").disabled = true;
 });
 
 retryButton.addEventListener("click", () => {
@@ -92,6 +138,13 @@ codeInput.addEventListener("input", () => {
   }
 });
 
+terminalCode.addEventListener("input", () => {
+  terminalCode.value = terminalCode.value.replace(/\D/g, "").slice(0, 4);
+  if (terminalStatus.dataset.state === "error") {
+    setTerminalStatus("", "Esperando contraseña...");
+  }
+});
+
 function setStatus(state, message) {
   statusMessage.dataset.state = state;
   statusText.textContent = message;
@@ -99,7 +152,7 @@ function setStatus(state, message) {
 
 function startTimer() {
   clearInterval(timerId);
-  secondsRemaining = 45;
+  secondsRemaining = 240;
   bombSolved = false;
   updateTimer();
   timerId = window.setInterval(() => {
@@ -121,4 +174,9 @@ function updateTimer() {
   const seconds = (secondsRemaining % 60).toString().padStart(2, "0");
   bombTimer.textContent = `${minutes}:${seconds}`;
   bombScene.classList.toggle("is-critical", secondsRemaining <= 10);
+}
+
+function setTerminalStatus(state, message) {
+  terminalStatus.dataset.state = state;
+  terminalStatus.textContent = message;
 }
